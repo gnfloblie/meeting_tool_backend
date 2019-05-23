@@ -1,0 +1,7 @@
+# PostgreSQL
+# ------------------------------------------------------------------------------
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=meeting_tool_backend
+POSTGRES_USER=qGfDxnMUDgtHSygZIrsfZEPklYPjNWBZ
+POSTGRES_PASSWORD=zE9cSR0YBCQQwE4qNrnPurX5ffmiNfDxYhbJIq7UTirg7NaCZ9eHXoKxWjX0OgIi
