@@ -16,6 +16,18 @@ urlpatterns = [
     path("users/", include("meeting_tool_backend.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
+    path(
+      "note/",
+      include("meeting_tool_backend.note.urls", namespace="note"),
+    ),
+    path(
+      "notepad/",
+      include("meeting_tool_backend.notepad.urls", namespace="notepad"),
+    ),
+    path(
+      "participant/",
+      include("meeting_tool_backend.participant.urls", namespace="participant"),
+    ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

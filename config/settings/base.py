@@ -72,6 +72,9 @@ THIRD_PARTY_APPS = [
 ]
 LOCAL_APPS = [
     "meeting_tool_backend.users.apps.UsersConfig",
+    "meeting_tool_backend.note.apps.NoteAppConfig",
+    "meeting_tool_backend.notepad.apps.NotepadAppConfig",
+    "meeting_tool_backend.participant.apps.ParticipantAppConfig",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
