@@ -68,7 +68,10 @@ THIRD_PARTY_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+    "rest_auth",
+    "rest_auth.registration",
     "rest_framework",
+    "rest_framework.authtoken"
 ]
 LOCAL_APPS = [
     "meeting_tool_backend.users.apps.UsersConfig",
@@ -275,7 +278,7 @@ ACCOUNT_AUTHENTICATION_METHOD = "username"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_EMAIL_REQUIRED = True
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_EMAIL_VERIFICATION = "none"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_ADAPTER = "meeting_tool_backend.users.adapters.AccountAdapter"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
@@ -304,4 +307,6 @@ REST_FRAMEWORK = {
     ),
 }
 REST_USE_JWT = True
+OLD_PASSWORD_FIELD_ENABLED = True
+LOGOUT_ON_PASSWORD_CHANGE = True
 # ------------------------------------------------------------------------------
