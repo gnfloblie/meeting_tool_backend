@@ -18,10 +18,22 @@ class NoteView(DetailView):
         note = Note.create_note(id)
         return JsonResponse(status=200, data={"result": Note.serialize_note(note)})
 
+    def get(self, request, notepad_id=None):
+        """
+        GET /note/:notepad_id
+        :param notepad_id:
+        :return:
+        """
+        notes = Note.objects.filter(notepad=notepad_id)
+        return JsonResponse(status=200, data={"result": [Note.serialize_note(note)
+                                                             for note in notes]})
+
+class NoteSingleView(DetailView):
+
     def put(self, request, id=None):
         """
         PUT note/:note_id
-        :param note_id:
+        :param id:
         :param request:
         :return:
         """
