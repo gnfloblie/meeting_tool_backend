@@ -6,26 +6,26 @@ from meeting_tool_backend.users.models import User
 class Participant(models.Model):
 
     id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, blank=True, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, blank=True, on_delete=models.CASCADE, null=True)
     first_name = models.CharField(blank=True, max_length=30)
     last_name = models.CharField(blank=True, max_length=30)
     anonymous = models.BooleanField(blank=True, default=False)
 
 
     @staticmethod
-    def create_participant():
-        return Participant.objects.create()
-
-    @staticmethod
-    def update_participant(participant, id):
-        participantObj = Participant.objects.get(id=id)
-        if participantObj.anonymous:
-            participantObj.first_name = participant.get("first_name")
-            participantObj.last_name = participant.get("last_name")
+    def create_participant(participant):
+        if participant.get("anonymous"):
+            return Participant.objects.create(
+                first_name = participant.get("first_name"),
+                last_name = participant.get("last_name"),
+                anonymous = participant.get("anonymous")
+        )
         else:
-            participantObj.user = participant.get("user")
-        participantObj.save()
-        return participantObj
+            user = User.objects.get(username = participant.get("name"))
+            return Participant.objects.create(
+                user = user,
+                anonymous = participant.get("anonymous")
+            )
 
     @staticmethod
     def serialize_participant(participant):

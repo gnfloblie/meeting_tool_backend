@@ -1,7 +1,7 @@
 import datetime
 from django.db import models
-from meeting_tool_backend.note.models import Note
 from meeting_tool_backend.participant.models import Participant
+from meeting_tool_backend.users.models import User
 
 
 class Notepad(models.Model):
@@ -11,22 +11,26 @@ class Notepad(models.Model):
     title = models.CharField(default='', max_length=30)
     created_at = models.DateTimeField(default=datetime.datetime.now())
     location = models.CharField(default='', max_length=30)
-    notes = models.ForeignKey(Note, blank=True, on_delete=models.CASCADE)
-    participants = models.ForeignKey(Participant, blank=True, on_delete=models.CASCADE)
+    participants = models.ManyToManyField(Participant, blank=True)
+    author = models.ForeignKey(User, blank=True, on_delete=models.CASCADE, null=True)
 
     @staticmethod
-    def create_notepad():
-        return Note.objects.create()
+    def create_notepad(author):
+        return Notepad.objects.create(
+            author=author,
+            project_name="",
+            title="",
+            location="",
+        )
 
     @staticmethod
     def update_notepad(notepad, id):
         notepadObj = Notepad.objects.get(id=id)
         notepadObj.project_name = notepad.get("project_name")
         notepadObj.title = notepad.get("title")
-        notepadObj.created_at = notepad.get("created_at")
         notepadObj.location = notepad.get("location")
-        notepadObj.notes = notepad.get("notes")
-        notepadObj.participants = notepad.get("participants")
+        print(notepad.get("participants"))
+        notepadObj.participants.set(notepad.get("participants"))
         notepadObj.save()
         return notepadObj
 
@@ -38,6 +42,6 @@ class Notepad(models.Model):
             "title": notepad.title,
             "created_at": notepad.created_at,
             "location": notepad.location,
-            "notes": [Note.serialize_note(note) for note in notepad.notes.all()],
-            "participants": [Participant.serialize_participant(participant) for participant in notepad.participant.all()]
+            "participants": [Participant.serialize_participant(participant) for participant in notepad.participants.all()],
+            "author": User.serialize_user(notepad.author)
         }

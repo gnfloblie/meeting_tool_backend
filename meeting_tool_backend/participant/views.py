@@ -6,14 +6,12 @@ from .models import Participant
 
 class ParticipantView(DetailView):
 
-    def post(self, request, notepad_id=None):
+    def post(self, request):
         """
         POST /participant/
-        :param notepad_id:
         :param request:
         :return:
         """
-        participant = Participant.create_participant()
-        notepad = Notepad.object.get(id=notepad_id)
-        notepad.participants.append(participant)
-        return JsonResponse(status=200, data={"message": "Teilnehmer wurde zum Notizblock hinzugefügt"})
+        participant = json.loads(request.body)
+        participantObj = Participant.create_participant(participant)
+        return JsonResponse(status=200, data={"result": Participant.serialize_participant(participantObj)})

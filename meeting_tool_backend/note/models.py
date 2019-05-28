@@ -1,5 +1,6 @@
 import datetime
 from django.db import models
+from meeting_tool_backend.notepad.models import Notepad
 
 
 class Note(models.Model):
@@ -9,10 +10,17 @@ class Note(models.Model):
     description = models.CharField(default='', max_length=100)
     created_at = models.DateTimeField(default=datetime.datetime.now())
     content = models.CharField(default='', max_length=1000)
+    notepad = models.ForeignKey(Notepad, blank=True, on_delete=models.CASCADE, null=True)
 
     @staticmethod
-    def create_note():
-        return Note.objects.create()
+    def create_note(notepad_id):
+        notepad = Notepad.objects.get(id=notepad_id)
+        return Note.objects.create(
+            type="",
+            description="",
+            content="",
+            notepad=notepad
+        )
 
     @staticmethod
     def update_note(note, id):
@@ -30,5 +38,6 @@ class Note(models.Model):
             "type": note.type,
             "description": note.description,
             "created_at": note.created_at,
-            "content": note.content
+            "content": note.content,
+            "notepad": Notepad.serialize_notepad(note.notepad)
         }
