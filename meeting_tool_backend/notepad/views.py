@@ -23,13 +23,14 @@ class NotepadOverView(DetailView):
                                               "note": Note.serialize_note(note)
                                               })
 
-    def get(self, request):
+    def get(self, request, user_id=None):
         """
-        GET /notepad/
+        GET /notepad/:user_id
         :param request:
+        :param user_id:
         :return:
         """
-        notepads = Notepad.objects.all()
+        notepads = Notepad.objects.filter(author=user_id)
         return JsonResponse(status=200, data={"result": [Notepad.serialize_notepad(notepad)
                                                              for notepad in notepads]})
 
