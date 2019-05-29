@@ -13,5 +13,15 @@ class ParticipantView(DetailView):
         :return:
         """
         participant = json.loads(request.body)
-        participantObj = Participant.create_participant(participant)
-        return JsonResponse(status=200, data={"result": Participant.serialize_participant(participantObj)})
+        participant_obj = Participant.create_participant(participant)
+        return JsonResponse(status=200, data={"result": Participant.serialize_participant(participant_obj)})
+
+    def get(self, request):
+        """
+        GET /participant/
+        :param request:
+        :return:
+        """
+        participants = Participant.objects.all()
+        return JsonResponse(status=200, data={"result": [Participant.serialize_participant(participant)
+                                                             for participant in participants]})

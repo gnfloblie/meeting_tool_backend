@@ -37,14 +37,14 @@ class NotepadOverView(DetailView):
 
 class NotepadSingleView(DetailView):
 
-    def get(self, request, notepad_id=None):
+    def get(self, request, id=None):
         """
-        GET notepad/:notepad_id
+        GET notepad/:id
         :param request:
-        :param notepad_id:
+        :param id:
         :return:
         """
-        notepad = Notepad.objects.get(id=notepad_id)
+        notepad = Notepad.objects.get(id=id)
         return JsonResponse(status=200, data={"result": Notepad.serialize_notepad(notepad)})
 
     def put(self, request, id=None):

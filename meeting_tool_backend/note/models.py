@@ -8,7 +8,7 @@ class Note(models.Model):
     id = models.AutoField(primary_key=True)
     type = models.CharField(default='', max_length=15)
     description = models.CharField(default='', max_length=100)
-    created_at = models.DateTimeField(default=datetime.datetime.now())
+    due = models.DateTimeField(null=True, blank=True)
     content = models.CharField(default='', max_length=1000)
     notepad = models.ForeignKey(Notepad, blank=True, on_delete=models.CASCADE, null=True)
 
@@ -27,6 +27,7 @@ class Note(models.Model):
         noteObj = Note.objects.get(id=id)
         noteObj.type = note.get("type")
         noteObj.description = note.get("description")
+        noteObj.due = note.get("due")
         noteObj.content = note.get("content")
         noteObj.save()
         return noteObj
@@ -37,7 +38,7 @@ class Note(models.Model):
             "id": note.id,
             "type": note.type,
             "description": note.description,
-            "created_at": note.created_at,
+            "due": note.due,
             "content": note.content,
             "notepad": Notepad.serialize_notepad(note.notepad)
         }

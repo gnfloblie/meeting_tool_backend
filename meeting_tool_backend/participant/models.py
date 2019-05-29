@@ -29,14 +29,14 @@ class Participant(models.Model):
 
     @staticmethod
     def serialize_participant(participant):
-        if participant.anonymous:
+        if participant.anonymous == True:
             return {
                 "id": participant.id,
                 "first_name": participant.first_name,
                 "last_name": participant.last_name,
                 "anonymous": participant.anonymous
             }
-        else:
+        elif participant.anonymous == False:
             return {
                 "id": participant.id,
                 "user": User.serialize_user(participant.user),
