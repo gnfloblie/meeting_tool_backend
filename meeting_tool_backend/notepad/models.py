@@ -15,6 +15,17 @@ class Notepad(models.Model):
     author = models.ForeignKey(User, blank=True, on_delete=models.CASCADE, null=True)
 
     @staticmethod
+    def date_format(date):
+        time_arr = []
+        year = date.strftime("%Y")
+        month = date.strftime("%m")
+        day = date.strftime("%d")
+        time_arr.append(year)
+        time_arr.append(month)
+        time_arr.append(day)
+        return time_arr
+
+    @staticmethod
     def create_notepad(author):
         return Notepad.objects.create(
             author=author,
@@ -40,7 +51,7 @@ class Notepad(models.Model):
             "id": notepad.id,
             "project_name": notepad.project_name,
             "title": notepad.title,
-            "created_at": notepad.created_at,
+            "created_at": Notepad.date_format(notepad.created_at),
             "location": notepad.location,
             "participants": [Participant.serialize_participant(participant) for participant in notepad.participants.all()],
             "author": User.serialize_user(notepad.author)

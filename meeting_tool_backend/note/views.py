@@ -20,7 +20,7 @@ class NoteView(DetailView):
 
     def get(self, request, notepad_id=None):
         """
-        GET /note/:notepad_id
+        GET /note/all/:notepad_id
         :param notepad_id:
         :return:
         """
@@ -32,7 +32,7 @@ class NoteSingleView(DetailView):
 
     def put(self, request, id=None):
         """
-        PUT note/:note_id
+        PUT note/single/:note_id
         :param id:
         :param request:
         :return:

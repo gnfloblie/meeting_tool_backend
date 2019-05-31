@@ -63,6 +63,7 @@ class NotepadSingleView(DetailView):
         for field in required_fields:
             if field not in body:
                 return JsonResponse(status=400, data={"error": "Feld fehlt", "message": "Bearbeiten des Notizblockes fehlgeschlagen"})
+
         for participant in body.get("participants"):
             if participant.get("anonymous"):
                 if participant.get("existing"):
