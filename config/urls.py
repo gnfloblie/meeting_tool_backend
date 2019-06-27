@@ -4,6 +4,15 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
+from rest_framework.authtoken import views
+from django.http import HttpResponse
+from django.contrib.auth.views import (
+    PasswordResetView,
+    PasswordResetDoneView,
+    PasswordResetConfirmView,
+    PasswordResetCompleteView
+)
+
 
 urlpatterns = [
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
@@ -14,8 +23,29 @@ urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
     # User management
     path("users/", include("meeting_tool_backend.users.urls", namespace="users")),
-    path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
+    path(
+      "note/",
+      include("meeting_tool_backend.note.urls", namespace="note"),
+    ),
+    path(
+      "notepad/",
+      include("meeting_tool_backend.notepad.urls", namespace="notepad"),
+    ),
+    path(
+      "participant/",
+      include("meeting_tool_backend.participant.urls", namespace="participant"),
+    ),
+    path('api-token-auth/', views.obtain_auth_token, name='api-token-auth'),
+    path('rest-auth/', include('rest_auth.urls')),
+    path('rest-auth/registration/', include('rest_auth.registration.urls')),
+    path('password_reset', view=PasswordResetView, name='password_reset'),
+    path('password_reset/done', view=PasswordResetDoneView, name='password_reset_done'),
+    path('reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})',
+       view=PasswordResetConfirmView,
+       name='password_reset_confirm'
+       ),
+    path('reset/done', view=PasswordResetCompleteView, name='password_reset_complete'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
