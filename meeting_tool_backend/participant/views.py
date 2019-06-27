@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.views.generic import DetailView
 from meeting_tool_backend.notepad.models import Notepad
 from .models import Participant
+import json
 
 
 class ParticipantView(DetailView):

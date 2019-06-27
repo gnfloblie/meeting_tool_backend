@@ -15,9 +15,14 @@ class NotepadOverView(DetailView):
         :param request:
         :return:
         """
+        participants = []
         json_body = json.loads(request.body)
         author = User.objects.get(username=json_body.get("username"))
+        participant = Participant.objects.get(user_id=author.id)
+        participants.append(participant)
         notepad = Notepad.create_notepad(author)
+        notepad.participants.set(participants)
+        notepad.save()
         note = Note.create_note(notepad.id)
         return JsonResponse(status=200, data={"notepad": Notepad.serialize_notepad(notepad),
                                               "note": Note.serialize_note(note)
@@ -63,28 +68,23 @@ class NotepadSingleView(DetailView):
         for field in required_fields:
             if field not in body:
                 return JsonResponse(status=400, data={"error": "Feld fehlt", "message": "Bearbeiten des Notizblockes fehlgeschlagen"})
+        if body.get("newParticipants") != []:
+            for y in range(0, len(body.get("newParticipants")) - 1, 2):
+                participant = {
+                    'first_name': body.get("newParticipants")[y]
+                }
+                y += 1
+                participant = {
+                    'first_name': participant.get("first_name"),
+                    'last_name': body.get("newParticipants")[y],
+                    'anonymous': True
+                }
 
+                created_participant = Participant.create_participant(participant)
+                participants.append(created_participant)
         for participant in body.get("participants"):
-            if participant.get("anonymous"):
-                if participant.get("existing"):
-                    anonymous_participant = Participant.objects.get(id=participant.get("id"))
-                    participants.append(anonymous_participant)
-                else:
-                    new_participant = Participant.create_participant(participant)
-                    participants.append(new_participant)
-            else:
-                if participant.get("existing"):
-                    user = User.objects.get(username=participant.get("name"))
-                    print(user)
-                    participant_obj = Participant.objects.get(user=user.id)
-                    print(participant_obj)
-                    participants.append(participant_obj)
-                else:
-                    new_participant = Participant.create_participant(participant)
-                    print(new_participant)
-                    participants.append(new_participant)
+            participants.append(Participant.objects.get(id=participant.get('item_id')))
         del body.get("participants")[:]
-        print(participants)
         for participant in participants:
             body.get("participants").append(participant)
         updated_notepad = Notepad.update_notepad(body, id)

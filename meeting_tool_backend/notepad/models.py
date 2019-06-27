@@ -40,7 +40,6 @@ class Notepad(models.Model):
         notepadObj.project_name = notepad.get("project_name")
         notepadObj.title = notepad.get("title")
         notepadObj.location = notepad.get("location")
-        print(notepad.get("participants"))
         notepadObj.participants.set(notepad.get("participants"))
         notepadObj.save()
         return notepadObj

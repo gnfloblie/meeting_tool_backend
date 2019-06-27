@@ -9,5 +9,5 @@ app_name = "Note"
 urlpatterns = [
     path('', view=csrf_exempt(views.NoteView.as_view()), name='note_view'),
     path('all/<int:notepad_id>', view=csrf_exempt(views.NoteView.as_view()), name='note_view'),
-    path('single/<int:id>', view=csrf_exempt(views.NoteSingleView.as_view()), name='note_singleview'),
+    path('single/', view=csrf_exempt(views.NoteSingleView.as_view()), name='note_singleview'),
 ]

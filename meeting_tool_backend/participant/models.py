@@ -21,7 +21,7 @@ class Participant(models.Model):
                 anonymous = participant.get("anonymous")
         )
         else:
-            user = User.objects.get(username = participant.get("name"))
+            user = User.objects.get(username = participant.get("username"))
             return Participant.objects.create(
                 user = user,
                 anonymous = participant.get("anonymous")

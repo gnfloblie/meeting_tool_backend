@@ -21,6 +21,7 @@ class NoteView(DetailView):
     def get(self, request, notepad_id=None):
         """
         GET /note/all/:notepad_id
+        :param request:
         :param notepad_id:
         :return:
         """
@@ -30,19 +31,18 @@ class NoteView(DetailView):
 
 class NoteSingleView(DetailView):
 
-    def put(self, request, id=None):
+    def put(self, request):
         """
-        PUT note/single/:note_id
-        :param id:
+        PUT note/single/
         :param request:
         :return:
         """
-        required_fields = {}
         body = json.loads(request.body)
+        notes = []
         if not body:
-            return JsonResponse(status=400, data={"error": "Notiz existiert nicht!", "message": "Bearbeiten der Notiz fehlgeschlagen"})
-        for field in required_fields:
-            if field not in body:
-                return JsonResponse(status=400, data={"error": "Feld fehlt", "message": "Bearbeiten der Notiz fehlgeschlagen"})
-        updated_note = Note.update_note(body, id)
-        return JsonResponse(status=200, data={"result": Note.serialize_note(updated_note)})
+            return JsonResponse(status=400, data={"error": "Notizen existieren nicht!", "message": "Bearbeiten der Notiz fehlgeschlagen"})
+        for note in body:
+            updated_note = Note.update_note(note, note.get('id'))
+            notes.append(updated_note)
+        return JsonResponse(status=200, data={"result": [Note.serialize_note(note)
+                                                             for note in notes]})
